@@ -8,4 +8,6 @@ dependencies = [
     "matplotlib>=3.10.5",
     "nibabel>=5.3.2",
     "notebook>=7.4.5",
+    "torch>=2.8.0",
+    "tqdm>=4.67.1",
 ]
