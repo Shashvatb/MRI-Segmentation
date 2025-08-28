@@ -55,6 +55,7 @@ def validate(model, loader, criterion, device):
     return val_loss/n, val_dice/n
 
 def main():
+    epochs = 10
     device = "cuda" if torch.cuda.is_available() else "cpu"
     model = UNet3D(n_channels=4, n_classes=4).to(device)
     criterion = CombinedLoss(weight_dice=0.7, weight_ce=0.3) 
@@ -64,11 +65,11 @@ def main():
     train_ds = BraTSDataset(root="data/ASNR-MICCAI-BraTS2023-GLI-Challenge-TrainingData", split='train')
     val_ds   = BraTSDataset(root="data/ASNR-MICCAI-BraTS2023-GLI-Challenge-TrainingData", split='val')
     train_loader = DataLoader(train_ds, batch_size=1, shuffle=True, num_workers=4, pin_memory=True)
-    val_loader   = DataLoader(val_ds,   batch_size=2, shuffle=False, num_workers=4, pin_memory=True)
+    val_loader   = DataLoader(val_ds,   batch_size=1, shuffle=False, num_workers=4, pin_memory=True)
 
     
     best_dice, best_path = 0.0, "best_unet3d.pt"
-    for epoch in range(1, 2):
+    for epoch in range(1, epochs+1):
         print('epoch: ', epoch)
         tr_loss, tr_dice = train_one_epoch(model, train_loader, optimizer, criterion, scaler, device)
         va_loss, va_dice = validate(model, val_loader, criterion, device)
