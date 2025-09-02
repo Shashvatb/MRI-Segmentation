@@ -49,7 +49,9 @@ def main():
     device = "cuda" if torch.cuda.is_available() else "cpu"
     model = UNet3D(n_channels=4, n_classes=4).to(device)
     if resume:
-        model = model.load_state_dict(torch.load(best_model, weights_only=True))
+        model.load_state_dict(torch.load(best_model))
+        print(model)
+        print('model loaded')
     criterion = CombinedLoss(weight_dice=0.7, weight_ce=0.3) 
     optimizer = optim.AdamW(model.parameters(), lr=1e-4, weight_decay=1e-5)
     scaler = GradScaler()
